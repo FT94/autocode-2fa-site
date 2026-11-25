@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoCode 2FA – Chính sách quyền riêng tư</title>
+<style>
+  :root { --bg:#ffffff; --fg:#14201b; --muted:#566862; --accent:#0b7a62; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0e1412; --fg:#e2ebe7; --muted:#8b9d96; --accent:#43cfa7; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.65 'Segoe UI',system-ui,sans-serif; padding:40px 16px 64px; }
+  main { max-width:680px; margin:0 auto; }
+  h1 { font-size:28px; margin:0 0 4px; }
+  h2 { font-size:19px; margin:32px 0 8px; }
+  p, li { color:var(--fg); }
+  .muted { color:var(--muted); font-size:14px; }
+  hr { border:0; border-top:1px solid color-mix(in srgb, var(--muted) 35%, transparent); margin:48px 0; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Chính sách quyền riêng tư</h1>
+  <p class="muted">Ứng dụng AutoCode 2FA · Cập nhật ngày 24/11/2026</p>
+
+  <h2>Tóm tắt</h2>
+  <p>AutoCode 2FA không thu thập, không gửi đi và không bán bất kỳ dữ liệu cá nhân nào. Mọi key 2FA, mã khôi phục và ghi chú của bạn chỉ nằm trên máy tính của bạn và được mã hóa.</p>
+
+  <h2>Dữ liệu được lưu trên máy</h2>
+  <ul>
+    <li>Tên dịch vụ, tên tài khoản, key 2FA, mã khôi phục và ghi chú bạn tự nhập.</li>
+    <li>Toàn bộ được mã hóa bằng AES-256-GCM với khóa sinh từ mật khẩu của bạn (PBKDF2-SHA256, 600.000 vòng) và lưu trong thư mục dữ liệu của ứng dụng trên máy.</li>
+    <li>Nhà phát triển không có mật khẩu, mã khôi phục hay bản sao nào của dữ liệu này, nên không thể đọc hay khôi phục giúp bạn.</li>
+  </ul>
+
+  <h2>Kết nối mạng</h2>
+  <p>Ứng dụng chỉ kết nối Internet cho một việc: đồng bộ giờ, để mã xác thực đúng ngay cả khi đồng hồ máy bị lệch. Khi đó ứng dụng gửi một yêu cầu xin giờ hiện tại tới một trong các dịch vụ sau:</p>
+  <ul>
+    <li>timeapi.io</li>
+    <li>time.now</li>
+    <li>Cloudflare (www.cloudflare.com/cdn-cgi/trace)</li>
+  </ul>
+  <p>Yêu cầu này không chứa bất kỳ thông tin nào về bạn hay tài khoản của bạn. Như mọi kết nối Internet, các dịch vụ trên nhìn thấy địa chỉ IP của bạn. Bạn có thể tắt việc này trong Cài đặt → Đồng bộ giờ; khi đó ứng dụng không kết nối mạng.</p>
+
+  <h2>Sao lưu lên đám mây (tùy chọn)</h2>
+  <p>Nếu bạn bật mục này, ứng dụng ghi một bản sao lưu <strong>đã mã hóa</strong> vào thư mục bạn chọn, ví dụ thư mục OneDrive hoặc Google Drive trên máy. Ứng dụng không tự kết nối tới Microsoft hay Google; phần mềm OneDrive/Google Drive của bạn tải file lên tài khoản của chính bạn. Không có mật khẩu hoặc mã khôi phục thì không ai đọc được file này, kể cả Microsoft, Google hay nhà phát triển.</p>
+
+  <p>Để đồng bộ giữa các máy, mỗi bản sao lưu có kèm một mã ngẫu nhiên của máy đã ghi và thời điểm ghi. Mã này do ứng dụng tự tạo, không chứa thông tin về bạn hay máy tính, và chỉ dùng để nhận ra bản do máy khác cập nhật. Trước mỗi lần đồng bộ, bản cũ được lưu trên chính máy của bạn.</p>
+
+  <h2>Mua bản Pro</h2>
+  <p>Việc mua bản Pro do Microsoft Store xử lý. Ứng dụng chỉ hỏi Microsoft Store xem bạn đã mua hay chưa; ứng dụng không nhận và không lưu thông tin thanh toán của bạn.</p>
+
+  <h2>Không có</h2>
+  <ul>
+    <li>Không quảng cáo, không phân tích hành vi, không theo dõi.</li>
+    <li>Không tài khoản trực tuyến, không đồng bộ đám mây.</li>
+    <li>Không chia sẻ dữ liệu với bên thứ ba.</li>
+  </ul>
+
+  <h2>Clipboard</h2>
+  <p>Khi bạn chép mã hoặc key, ứng dụng yêu cầu Windows không lưu nội dung vào lịch sử clipboard và không đồng bộ lên cloud, rồi tự xóa clipboard sau 30 giây nếu bạn chưa chép thứ khác.</p>
+  <p>Khi bạn mở hộp thoại Thêm tài khoản, ứng dụng đọc chữ đang có trong clipboard (chỉ trên máy) để tự điền nếu đó là key 2FA hoặc liên kết otpauth://; key được xóa khỏi clipboard sau khi điền. Ảnh mã QR bạn quét trên màn hình cũng được xóa khỏi clipboard sau khi đọc. Nội dung khác trong clipboard không bị lưu hay gửi đi.</p>
+
+  <h2>Gợi ý tài khoản và tự gõ mã</h2>
+  <p>Khi bạn nhấn Ctrl+Alt+A, ứng dụng đọc tiêu đề và tên chương trình của cửa sổ bạn đang dùng để đưa tài khoản phù hợp lên đầu. Thông tin này chỉ nằm trong bộ nhớ, không được lưu lại hay gửi đi, và bị xóa sau 5 phút. Khi bạn nhấn Enter, ứng dụng gõ mã 2FA vào đúng cửa sổ đó như bàn phím; bạn có thể tắt tính năng này trong Cài đặt.</p>
+
+  <h2>Xóa dữ liệu</h2>
+  <p>Gỡ ứng dụng sẽ xóa thư mục dữ liệu của nó. Trước khi gỡ, hãy dùng Cài đặt → Sao lưu nếu bạn muốn giữ lại key.</p>
+
+  <h2>Liên hệ</h2>
+  <p>Nếu có câu hỏi về chính sách này, hãy gửi qua <a href="https://github.com/FT94/autocode-2fa-site/issues">trang hỗ trợ</a> (cần tài khoản GitHub) hoặc liên kết hỗ trợ trên trang Microsoft Store của ứng dụng. Đừng gửi key 2FA, mật khẩu hay mã khôi phục cho bất kỳ ai.</p>
+
+  <hr>
+
+  <h1>Privacy Policy</h1>
+  <p class="muted">AutoCode 2FA app · Updated November 24, 2026</p>
+  <h2>Summary</h2>
+  <p>AutoCode 2FA does not collect, transmit or sell any personal data. Your 2FA keys, recovery codes and notes stay on your computer, encrypted.</p>
+  <h2>Data stored on your device</h2>
+  <p>Service names, account names, 2FA keys, recovery codes and notes that you enter. They are encrypted with AES-256-GCM using a key derived from your password (PBKDF2-SHA256, 600,000 iterations) and stored in the app's local data folder. The developer has no copy of your password, recovery code or data.</p>
+  <h2>Network access</h2>
+  <p>The app connects to the Internet only to synchronize the time, so that codes stay correct when the device clock is off. It requests the current time from timeapi.io, time.now or Cloudflare. These requests contain no information about you or your accounts; like any Internet request, the services can see your IP address. You can turn this off in Settings.</p>
+  <h2>Cloud backup (optional)</h2>
+  <p>If you turn it on, the app writes an <strong>encrypted</strong> backup into a folder you choose, such as your OneDrive or Google Drive folder. The app does not connect to Microsoft or Google itself; your OneDrive/Google Drive software uploads the file to your own account. Without your password or recovery code nobody can read it, including Microsoft, Google or the developer.</p>
+  <p>For syncing between PCs, each backup carries a random ID of the PC that wrote it and the time it was written. The app creates this ID itself; it contains nothing about you or your computer and is only used to recognise copies updated on another PC. Before every sync, the old copy is kept on your own PC.</p>
+  <h2>Buying Pro</h2>
+  <p>Pro purchases are handled by the Microsoft Store. The app only asks the Microsoft Store whether you own Pro; it never receives or stores your payment details.</p>
+  <h2>Clipboard</h2>
+  <p>When you copy a code or key, the app asks Windows to keep it out of clipboard history and cloud clipboard, and clears it after 30 seconds unless you have copied something else. When you open "Add account", the app reads the text on the clipboard (locally) to fill in a 2FA key or otpauth:// link, then removes that key from the clipboard. A QR image you scan on screen is removed from the clipboard after it is read. Nothing else on the clipboard is stored or sent anywhere.</p>
+  <h2>Account suggestions and auto-type</h2>
+  <p>When you press Ctrl+Alt+A, the app reads the title and program name of the window you are using, to put the matching account first. This stays in memory only, is never stored or sent anywhere, and is discarded after 5 minutes. When you press Enter, the app types the 2FA code into that same window, like a keyboard; you can turn this off in Settings.</p>
+  <h2>What the app does not do</h2>
+  <p>No advertising, analytics or tracking. No online accounts or cloud sync. No sharing with third parties.</p>
+  <h2>Contact</h2>
+  <p>For questions about this policy, use the <a href="https://github.com/FT94/autocode-2fa-site/issues">support page</a> (a GitHub account is needed) or the support link on the app's Microsoft Store page. Never send your 2FA keys, password or recovery code to anyone.</p>
+</main>
+</body>
+</html>

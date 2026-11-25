@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoCode 2FA – Hỗ trợ</title>
+<meta name="description" content="AutoCode 2FA: two-factor authentication codes on your Windows PC, offline and encrypted. Support, privacy policy and security design.">
+<style>
+  :root { --bg:#ffffff; --fg:#14201b; --muted:#566862; --accent:#0b7a62; --soft:rgba(11,122,98,.08); }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0e1412; --fg:#e2ebe7; --muted:#8b9d96; --accent:#43cfa7; --soft:rgba(67,207,167,.1); } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.65 'Segoe UI',system-ui,sans-serif; padding:40px 16px 64px; }
+  main { max-width:680px; margin:0 auto; }
+  h1 { font-size:30px; margin:0 0 4px; }
+  h2 { font-size:19px; margin:32px 0 8px; }
+  h3 { font-size:16px; margin:20px 0 4px; }
+  .muted { color:var(--muted); font-size:14px; }
+  .links { display:flex; flex-wrap:wrap; gap:10px; margin:20px 0 8px; }
+  .links a { padding:8px 14px; border-radius:10px; background:var(--soft); text-decoration:none; font-weight:600; }
+  hr { border:0; border-top:1px solid color-mix(in srgb, var(--muted) 35%, transparent); margin:48px 0; }
+  a { color:var(--accent); }
+  .warn { padding:12px 14px; border-radius:10px; background:var(--soft); }
+</style>
+</head>
+<body>
+<main>
+  <h1>AutoCode 2FA</h1>
+  <p class="muted">Mã xác thực 2 bước trên máy tính Windows · chạy offline · key được mã hóa</p>
+  <div class="links">
+    <a href="https://github.com/FT94/autocode-2fa-site/issues">Gửi câu hỏi / báo lỗi</a>
+    <a href="privacy-policy.html">Chính sách quyền riêng tư</a>
+    <a href="security.html">Thiết kế bảo mật</a>
+  </div>
+  <p class="warn"><b>Không bao giờ</b> gửi key 2FA, mật khẩu app, mã khôi phục hay ảnh mã QR cho bất kỳ ai, kể cả người tự xưng là hỗ trợ.</p>
+
+  <h2>Câu hỏi thường gặp</h2>
+  <h3>Quên mật khẩu mở app?</h3>
+  <p>Ở màn hình mở khóa, chọn <b>Quên mật khẩu?</b> rồi nhập mã khôi phục bạn đã lưu khi tạo app, sau đó đặt mật khẩu mới. Mất cả mã khôi phục thì không ai mở được kho, kể cả nhà phát triển.</p>
+  <h3>Điện thoại hỏng, không lấy được mã?</h3>
+  <p>App không đọc được dữ liệu trong điện thoại đã hỏng. Hãy dùng mã dự phòng (backup codes) hoặc cách khôi phục của từng trang web. Sau đó thêm key vào AutoCode 2FA để lần sau luôn có bản thứ hai trên máy tính.</p>
+  <h3>Đổi sang máy tính mới?</h3>
+  <p>Bật <b>Cài đặt → Sao lưu lên đám mây</b> (OneDrive hoặc Google Drive). Cài app trên máy mới, app tự tìm bản sao lưu; nhập mật khẩu hoặc mã khôi phục là xong. Không dùng đám mây thì tải file sao lưu trong Cài đặt rồi khôi phục trên máy mới.</p>
+  <h3>Mã bị báo sai?</h3>
+  <p>Mã 2FA phụ thuộc vào giờ. Mở <b>Cài đặt → Đồng bộ giờ → Đồng bộ ngay</b>, và bật “Đặt giờ tự động” trong Cài đặt Windows.</p>
+  <h3>Mua Pro rồi nhưng app chưa nhận?</h3>
+  <p>Mở <b>Cài đặt → Bản Pro → Kiểm tra lại giao dịch</b>. Pro gắn với tài khoản Microsoft dùng để mua, nên hãy đăng nhập đúng tài khoản đó trong Microsoft Store.</p>
+
+  <hr>
+
+  <h1>AutoCode 2FA</h1>
+  <p class="muted">Two-factor codes on your Windows PC · works offline · encrypted keys</p>
+  <div class="links">
+    <a href="https://github.com/FT94/autocode-2fa-site/issues">Ask a question / report a bug</a>
+    <a href="privacy-policy.html">Privacy policy</a>
+    <a href="security.html">Security design</a>
+  </div>
+  <p class="warn"><b>Never</b> send your 2FA keys, app password, recovery code or QR images to anyone, including someone claiming to be support.</p>
+
+  <h2>Frequently asked questions</h2>
+  <h3>Forgot the app password?</h3>
+  <p>On the unlock screen choose <b>Forgot password?</b>, enter the recovery code you saved when you set up the app, then set a new password. Without the recovery code nobody can open the vault, not even the developer.</p>
+  <h3>Phone broken and no codes?</h3>
+  <p>The app cannot read data from a broken phone. Use each site's backup codes or account recovery, then add your keys to AutoCode 2FA so you always have a second copy on your PC.</p>
+  <h3>Moving to a new PC?</h3>
+  <p>Turn on <b>Settings → Cloud backup</b> (OneDrive or Google Drive). Install the app on the new PC and it finds the backup; enter your password or recovery code. Without cloud backup, save a backup file in Settings and restore it on the new PC.</p>
+  <h3>Codes rejected as wrong?</h3>
+  <p>2FA codes depend on the time. Open <b>Settings → Time sync → Sync now</b>, and turn on “Set time automatically” in Windows Settings.</p>
+  <h3>Bought Pro but the app doesn't show it?</h3>
+  <p>Open <b>Settings → Pro → Check my purchase again</b>. Pro belongs to the Microsoft account used to buy it, so sign in to the Microsoft Store with that account.</p>
+</main>
+</body>
+</html>

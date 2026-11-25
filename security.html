@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AutoCode 2FA – Thiết kế bảo mật</title>
+<style>
+  :root { --bg:#ffffff; --fg:#14201b; --muted:#566862; --accent:#0b7a62; --line:#dfe6e3; --code:#f3f6f5; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0e1412; --fg:#e2ebe7; --muted:#8b9d96; --accent:#43cfa7; --line:#25322d; --code:#151d1a; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.65 'Segoe UI',system-ui,sans-serif; padding:40px 16px 64px; }
+  main { max-width:720px; margin:0 auto; }
+  h1 { font-size:28px; margin:0 0 4px; }
+  h2 { font-size:19px; margin:32px 0 8px; }
+  .muted { color:var(--muted); font-size:14px; }
+  table { border-collapse:collapse; width:100%; font-size:14.5px; }
+  th, td { text-align:left; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  code { background:var(--code); padding:1px 5px; border-radius:4px; font-size:13.5px; }
+  hr { border:0; border-top:1px solid var(--line); margin:48px 0; }
+  a { color:var(--accent); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Thiết kế bảo mật</h1>
+  <p class="muted">Ứng dụng AutoCode 2FA · Cập nhật ngày 24/11/2026</p>
+
+  <p>Trang này mô tả cách ứng dụng bảo vệ các key 2FA của bạn, để bạn tự đánh giá. Ứng dụng chạy hoàn toàn trên máy, không có tài khoản trực tuyến và không có máy chủ của nhà phát triển.</p>
+
+  <h2>Mã hóa kho key</h2>
+  <table>
+    <tr><th>Thành phần</th><th>Thiết kế</th></tr>
+    <tr><td>Dữ liệu</td><td>AES-256-GCM với một <b>khóa dữ liệu</b> ngẫu nhiên 256 bit; mỗi lần lưu dùng nonce ngẫu nhiên 96 bit mới.</td></tr>
+    <tr><td>Mật khẩu chính</td><td>Khóa dữ liệu được khóa lại bằng khóa sinh từ mật khẩu qua <b>Argon2id</b> (64 MiB, 3 lượt, salt ngẫu nhiên 128 bit). Mật khẩu được chuẩn hóa Unicode NFC.</td></tr>
+    <tr><td>Mã khôi phục</td><td>160 bit ngẫu nhiên (8 nhóm × 4 ký tự Base32), khóa lại khóa dữ liệu qua PBKDF2-SHA256 600.000 vòng. Chỉ hiện một lần.</td></tr>
+    <tr><td>Windows Hello (tùy chọn)</td><td>Khóa RSA nằm trong chip TPM của máy, chỉ ký khi bạn xác thực bằng khuôn mặt, vân tay hoặc PIN. Chữ ký của một chuỗi thử thách ngẫu nhiên được dùng để khóa lại khóa dữ liệu. Khóa riêng không rời khỏi TPM.</td></tr>
+    <tr><td>Đổi mật khẩu / mã khôi phục</td><td>Tạo <b>khóa dữ liệu mới</b> và mã khôi phục mới; xóa các bản sao lưu tự động cũ. Mật khẩu cũ, mã cũ và bản sao cũ không mở được kho hiện tại.</td></tr>
+    <tr><td>File bị sửa</td><td>Tham số mã hóa bất thường (số vòng, bộ nhớ) bị từ chối ngay, không làm treo ứng dụng.</td></tr>
+  </table>
+
+  <h2>Trên máy tính</h2>
+  <ul>
+    <li><b>Clipboard:</b> mã và key được đánh dấu để Windows không lưu vào lịch sử clipboard (Win+V) và không đồng bộ lên cloud; tự xóa sau 30 giây, khi khóa ứng dụng và khi thoát.</li>
+    <li><b>Chống chụp màn hình:</b> cửa sổ không xuất hiện trong ảnh chụp, quay màn hình hay chia sẻ màn hình (mặc định bật).</li>
+    <li><b>Tự khóa:</b> khi không dùng, khi thu nhỏ, khi khóa máy (Win+L), khi máy ngủ, hoặc bằng Ctrl+L. Khi khóa, khóa dữ liệu trong bộ nhớ bị ghi đè và các hộp thoại được xóa trắng.</li>
+    <li><b>Lưu file an toàn:</b> ghi vào file tạm rồi đổi tên, giữ 20 bản trước đó để phòng hỏng file. Chỉ một cửa sổ ứng dụng được chạy cùng lúc.</li>
+    <li><b>Quét mã QR trên màn hình:</b> ảnh được giải mã ngay trên máy, không gửi đi đâu.</li>
+    <li><b>Tự gõ mã (Ctrl+Alt+A rồi Enter):</b> chỉ gõ vào đúng cửa sổ bạn đang dùng lúc nhấn phím tắt; ngay trước khi gõ, app kiểm tra lại đó vẫn là chương trình ấy và tiêu đề chưa đổi. Không gõ vào cửa sổ chạy quyền quản trị, chỉ gõ chữ và số đúng dạng mã 2FA, quên cửa sổ sau 2 phút hoặc sau khi gõ. Gợi ý dựa trên tiêu đề cửa sổ, nên hãy luôn kiểm tra địa chỉ trang.</li>
+    <li><b>Clipboard đầu vào:</b> key tự điền từ clipboard và ảnh mã QR vừa quét được xóa khỏi clipboard; mã “Chuyển tài khoản” nằm trong clipboard phải được bạn xác nhận mới nhập.</li>
+    <li><b>Đồng bộ giờ:</b> độ lệch lớn hơn 10 phút chỉ được áp dụng khi hai máy chủ giờ khác nhau cho cùng kết quả.</li>
+    <li><b>Sao chép sang điện thoại:</b> phải nhập lại mật khẩu mới hiện mã QR chứa key; đóng hộp thoại là mã QR bị xóa khỏi màn hình.</li>
+  </ul>
+
+  <h2>Kết nối mạng</h2>
+  <ul>
+    <li>Chỉ để <b>đồng bộ giờ</b> (timeapi.io, time.now hoặc Cloudflare), không gửi dữ liệu nào của bạn; có thể tắt.</li>
+    <li><b>Sao lưu đám mây</b> (tùy chọn) chỉ là ghi file <b>đã mã hóa</b> vào thư mục OneDrive / Google Drive bạn chọn; phần mềm đồng bộ của bạn tải lên. Không có mật khẩu hoặc mã khôi phục thì không ai đọc được.</li>
+    <li>Mua bản Pro do Microsoft Store xử lý.</li>
+  </ul>
+
+  <h2>Giới hạn cần biết</h2>
+  <ul>
+    <li>Nếu máy đã bị cài phần mềm độc hại chạy dưới tài khoản Windows của bạn, nó có thể đọc mã khi ứng dụng đang mở khóa. Không ứng dụng 2FA nào trên máy tính chống được điều này hoàn toàn.</li>
+    <li>Quên cả mật khẩu lẫn mã khôi phục thì không ai, kể cả nhà phát triển, mở được kho.</li>
+    <li>Windows Hello giúp mở nhanh; mức an toàn khi đó dựa vào mã PIN Windows và cơ chế chống thử sai của TPM.</li>
+    <li>File xuất từ ứng dụng khác ở dạng không mã hóa: hãy xóa sau khi nhập.</li>
+  </ul>
+
+  <hr>
+
+  <h1>Security design</h1>
+  <p class="muted">AutoCode 2FA app · Updated November 24, 2026</p>
+  <p>Everything runs on your computer: no online account, no developer server.</p>
+  <h2>Vault encryption</h2>
+  <ul>
+    <li>Data: AES-256-GCM with a random 256-bit <b>data key</b>; a fresh random 96-bit nonce on every save.</li>
+    <li>Master password: wraps the data key via <b>Argon2id</b> (64 MiB, 3 passes, random 128-bit salt); passwords are NFC-normalized.</li>
+    <li>Recovery code: 160 random bits, wraps the data key via PBKDF2-SHA256 (600,000 iterations); shown once.</li>
+    <li>Windows Hello (optional): an RSA key in the TPM signs a random challenge only after face, fingerprint or PIN; the signature wraps the data key. The private key never leaves the TPM.</li>
+    <li>Changing the password or recovery code creates a <b>new data key</b> and removes older automatic backups, so old passwords, codes and copies cannot open the current vault.</li>
+    <li>Tampered parameters (iterations, memory) are rejected immediately.</li>
+  </ul>
+  <h2>On the PC</h2>
+  <ul>
+    <li>Clipboard content is excluded from Windows clipboard history and cloud clipboard, and cleared after 30 s, on lock and on exit.</li>
+    <li>The window is hidden from screenshots, recordings and screen sharing (on by default).</li>
+    <li>Auto-lock when idle, minimized, on Win+L, on sleep, or with Ctrl+L; the in-memory data key is overwritten on lock.</li>
+    <li>Atomic file writes with 20 previous versions kept; single instance only.</li>
+    <li>On-screen QR scanning is decoded locally.</li>
+    <li>Auto-type (Ctrl+Alt+A, then Enter) only types into the window that was active when you pressed the shortcut; right before typing, the app re-checks that it is the same process and the title has not changed. It never types into administrator windows, only types code-shaped text, and forgets the window after 2 minutes or once it has typed. Suggestions are based on the window title, so always check the page address.</li>
+    <li>A key auto-filled from the clipboard, and a scanned QR image, are removed from the clipboard; a “Transfer accounts” code found on the clipboard is only imported after you confirm it.</li>
+    <li>Time offsets larger than 10 minutes are only applied when two different time servers agree.</li>
+    <li>"Copy to a phone" QR codes require your password again and are wiped from the screen when the dialog closes.</li>
+  </ul>
+  <h2>Network</h2>
+  <ul>
+    <li>Only for time sync (timeapi.io, time.now or Cloudflare); no user data is sent; can be turned off.</li>
+    <li>Optional cloud backup writes an <b>encrypted</b> file into your OneDrive / Google Drive folder; your sync app uploads it.</li>
+    <li>Pro purchases are handled by the Microsoft Store.</li>
+  </ul>
+  <h2>Limits</h2>
+  <ul>
+    <li>Malware running as your Windows user can read codes while the app is unlocked; no desktop authenticator fully prevents that.</li>
+    <li>If you lose both the password and the recovery code, nobody can open the vault.</li>
+    <li>Windows Hello relies on your Windows PIN and the TPM's anti-hammering protection.</li>
+    <li>Unencrypted export files from other apps should be deleted after import.</li>
+  </ul>
+</main>
+</body>
+</html>
